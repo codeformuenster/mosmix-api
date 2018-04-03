@@ -1,0 +1,16 @@
+{
+  "title": "Mosmix Forecasts",
+  "license": "GeoNutzV",
+  "license_url": "https://www.dwd.de/copyright",
+  "source": "Deutscher Wetterdienst Open Data Server",
+  "source_url": "https://opendata.dwd.de/weather/local_forecasts/mos/MOSMIX_S_LATEST_240.kmz",
+  "databases": {
+    "mosmix": {
+      "queries": {
+        "find_place": "select id, name, X(the_geom) as lon, Y(the_geom) as lat, Z(the_geom) as alt FROM forecast_places WHERE name LIKE :name",
+        "forecasts": "select p.id, p.name, X(p.the_geom) as lon, Y(p.the_geom) as lat, Z(p.the_geom) as alt, f.timestep, f.name as variable, f.value FROM forecast_places AS p JOIN forecasts as f ON p.id = f.place_id WHERE id = :id",
+        "forecast": "select p.id, p.name, X(p.the_geom) as lon, Y(p.the_geom) as lat, Z(p.the_geom) as alt, f.timestep, f.name as variable, f.value FROM forecast_places AS p JOIN forecasts as f ON p.id = f.place_id WHERE p.id = :id AND f.name = :variable"
+      }
+    }
+  }
+}
