@@ -1,0 +1,22 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: mosmix-processor
+spec:
+  schedule: "*/30 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: mosmix-processor
+            image: quay.io/codeformuenster/mosmix-processor:v20180529-1
+            command: ["./mosmix-processor", "-db", "postgresql://mosmix:fls0g6ESjITX7k1HImohIK22o5I38HAi1@mosmix-postgis?sslmode=disable"]
+            resources:
+              requests:
+                memory: "64Mi"
+                cpu: "150m"
+              limits:
+                memory: "128Mi"
+                cpu: "300m"
+          restartPolicy: OnFailure
