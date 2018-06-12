@@ -1,5 +1,5 @@
 [pg]
-host = "db"
+host = "mosmix-postgis"
 user = "mosmix"
 pass = "fls0g6ESjITX7k1HImohIK22o5I38HAi1"
 port = 5432
