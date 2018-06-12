@@ -14,7 +14,7 @@ FROM alpine:3.7
 
 COPY --from=build-stage /go/src/github.com/prest/prest/prest /
 
-COPY api/prest.toml /prest.toml
-COPY api/queries /prest-queries
+COPY ./prest.toml /prest.toml
+COPY ./queries /prest-queries
 
 CMD ["/prest"]
