@@ -1,0 +1,1 @@
+SELECT id, name, lng, lat, alt, (round(ST_DistanceSphere(the_geom, ST_GeomFromText('POINT({{.lon}} {{.lat}})', 4326)) / 10) / 100) AS distance_km FROM places WHERE ST_DistanceSphere(the_geom, ST_GeomFromText('POINT({{.lon}} {{.lat}})', 4326)) < ({{defaultOrValue "distance" "10"}} * 1000) ORDER BY distance_km
