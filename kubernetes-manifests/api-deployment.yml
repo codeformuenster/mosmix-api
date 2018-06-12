@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mosmix-api
+  namespace: mosmix
+  labels:
+    app: mosmix-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mosmix-api
+  template:
+    metadata:
+      labels:
+        app: mosmix-api
+    spec:
+      containers:
+      - name: mosmix-api
+        image: quay.io/codeformuenster/mosmix-api:v20180612-1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+        resources:
+          null
