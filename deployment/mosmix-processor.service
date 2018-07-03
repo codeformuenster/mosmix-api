@@ -1,0 +1,7 @@
+[Unit]
+Description=Execute the mosmix parser
+
+[Service]
+Type=oneshot
+
+ExecStart=/usr/local/bin/docker-compose -f /srv/mosmix/docker-compose.yml run --rm -T processor
