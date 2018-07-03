@@ -1,3 +1,16 @@
+# Usage
+
+Usually the workflow looks like this:
+
+1. Find out the id of the place you want forecasts for
+
+    https://mosmix-api.codeformuenster.org/_QUERIES/places/find_by_name?name=muenster
+
+2. Use the id to query the forecasts
+
+    https://mosmix-api.codeformuenster.org/_QUERIES/forecasts/forecast?id=P0036
+
+
 # Deployment
 
 Database, api and processor is running inside containers. You need Docker, docker-compose and systemd (for scheduling). The supplied `docker-compose.yml` assumes an external frontend proxy.
