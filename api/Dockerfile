@@ -10,7 +10,7 @@ RUN git clone https://github.com/prest/prest.git . && \
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -tags netgo -ldflags='-s -w -extldflags -static'
 RUN go build -ldflags "-s -w"
 
-FROM alpine:3.7
+FROM alpine:3.8
 
 COPY --from=build-stage /go/src/github.com/prest/prest/prest /
 
