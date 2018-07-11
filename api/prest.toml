@@ -1,10 +1,3 @@
-[pg]
-host = "mosmix-postgis"
-user = "mosmix"
-pass = "fls0g6ESjITX7k1HImohIK22o5I38HAi1"
-port = 5432
-database = "mosmix"
-
 [ssl]
 mode = "disable"
 
@@ -19,12 +12,3 @@ restrict = true
 
 [cors]
 alloworigin = ["*"]
-# dwd_available_forecast_variables
-# dwd_available_timesteps
-# dwd_referenced_models
-# forecast_places
-# forecasts
-# metadata
-
-# forecasts_all
-# places
