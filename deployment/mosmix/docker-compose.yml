@@ -1,0 +1,79 @@
+version: "2.4"
+
+services:
+  mosmix-postgis:
+    container_name: mosmix-postgis
+    image: mdillon/postgis:10-alpine
+    environment:
+      - POSTGRES_USER=mosmix
+      - POSTGRES_PASSWORD=fls0g6ESjITX7k1HImohIK22o5I38HAi1
+    cap_drop:
+      - ALL
+    user: postgres
+    restart: always
+    networks:
+      - mosmix-internal
+  processor:
+    container_name: mosmix-processor
+    image: quay.io/codeformuenster/mosmix-processor:v20180708-1
+    cap_drop:
+      - ALL
+    entrypoint:
+      - /mosmix-processor
+      - -db=postgresql://mosmix:fls0g6ESjITX7k1HImohIK22o5I38HAi1@mosmix-postgis?sslmode=disable
+    security_opt:
+      - no-new-privileges=true
+    read_only: true
+    volumes:
+      - type: volume
+        target: /tmp
+        source: processor-tmp
+    networks:
+      - mosmix-internal
+
+  api:
+    container_name: mosmix-api
+    image: quay.io/codeformuenster/mosmix-api:v20180711-1
+    environment:
+      - PREST_PG_USER=mosmix
+      - PREST_PG_PASS=fls0g6ESjITX7k1HImohIK22o5I38HAi1
+      - PREST_PG_HOST=mosmix-postgis
+      - PREST_PG_DATABASE=mosmix
+      - PREST_DEBUG=true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges=true
+    read_only: true
+    restart: always
+    networks:
+      - mosmix-internal
+      - mosmix-external
+  frontend-proxy:
+    image: abiosoft/caddy:0.11.0
+    container_name: mosmix-frontend
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges=true
+    read_only: true
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - CADDYPATH=/etc/caddycerts
+    volumes:
+      - /etc/mosmix/Caddyfile:/etc/Caddyfile:ro
+      - /etc/mosmix/certs:/etc/caddycerts
+      - /etc/mosmix/static:/srv
+    networks:
+      - mosmix-external
+
+networks:
+  mosmix-internal:
+  mosmix-external:
+
+volumes:
+  processor-tmp:

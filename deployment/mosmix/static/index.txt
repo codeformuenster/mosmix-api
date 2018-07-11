@@ -1,0 +1,4 @@
+Welcome to Mosmix API
+
+Data basis: Deutscher Wetterdienst
+Datenbasis: Deutscher Wetterdienst

@@ -1,0 +1,19 @@
+(defaults) {
+  gzip
+  log stdout
+  errors stderr
+  tls off
+  ext .html .txt
+  header / {
+#    Strict-Transport-Security "max-age=31536000;"
+    X-XSS-Protection "1; mode=block"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "DENY"
+    X-Data-basis "Deutscher Wetterdienst"
+  }
+}
+
+0.0.0.0:80 {
+  import defaults
+  proxy /v1 http://api:3000/
+}

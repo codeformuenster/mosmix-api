@@ -1,0 +1,8 @@
+[Unit]
+Description=Run mosmix-processor-l.service on 03,09,15,21:30 UTC
+
+[Timer]
+OnCalendar=3,9,15,21:30 UTC
+
+[Install]
+WantedBy=multi-user.target

@@ -4,32 +4,33 @@ Usually the workflow looks like this:
 
 1. Find out the id of the place you want forecasts for
 
-    https://mosmix-api.codeformuenster.org/_QUERIES/places/find_by_name?name=muenster
+    https://mosmix-api.codeformuenster.org/v1/places?schema=mosmix_s&name=muenster
+    https://mosmix-api.codeformuenster.org/v1/places?schema=mosmix_s&lat=
 
 2. Use the id to query the forecasts
 
-    https://mosmix-api.codeformuenster.org/_QUERIES/forecasts/forecast?id=P0036
-
+    https://mosmix-api.codeformuenster.org/v1/forecast?schema=mosmix_s&id=P0036
 
 # Deployment
 
-Database, api and processor is running inside containers. You need Docker, docker-compose and systemd (for scheduling). The supplied `docker-compose.yml` assumes an external frontend proxy.
+Database, api and processor is running inside containers. You need Docker, docker-compose and systemd (for scheduling). The supplied `docker-compose.yml` brings everything needed for running and serving the whole stack
 
 ## Steps to recreate the deployment
 
 - Install docker, docker-compose
 - Copy the files from the `deployment` folder to you server
-  - `docker-compose.yml` to `/srv/mosmix`
-  - `mosmix-processor.service` to `/etc/systemd/system/mosmix-processor.service`
-  - `mosmix-processor.timer` to `/etc/systemd/system/mosmix-processor.timer`
-- Start the database and api on the server
-  - Go to `/srv/mosmix`
-  - `docker-compose up -d mosmix-postgis api`
-- Execute the processor once
-  - `docker-compose run --rm processor`
+  - folder `mosmix` to `/etc/mosmix`
+  - folder `systemd/system` to `/etc/systemd/system`
+- Start the database on the server
+  - `docker-compose -f /etc/mosmix/docker-compose.yml up -d mosmix-postgis`
+- Execute the processor(s) once
+  - `docker-compose -f /etc/mosmix/docker-compose.yml run --rm processor mosmix_s`
+  - `docker-compose -f /etc/mosmix/docker-compose.yml run --rm processor mosmix_l`
 - Enable and start the systemd timer on the server
   - `systemctl daemon-reload`
-  - `systemctl start mosmix-processor.timer`
-  - `systemctl enable mosmix-processor.timer`
+  - `systemctl start mosmix-processor-l.timer mosmix-processor-s.timer`
+  - `systemctl enable mosmix-processor-l.timer mosmix-processor-s.timer`
+- Start the frontend-proxy and api on the server
+  - `docker-compose -f /etc/mosmix/docker-compose.yml up -d api frontend-proxy`
 
-You now should have a running version of the api accessible on port 3000 (or through the url configured in your front end proxy).
+You now should have a running version of the api accessible at port 80.

@@ -1,8 +1,0 @@
-[Unit]
-Description=Run mosmix-processor.service every 30 minutes
-
-[Timer]
-OnCalendar=*:0/30
-
-[Install]
-WantedBy=multi-user.target
