@@ -39,7 +39,6 @@ services:
       - PREST_PG_PASS=fls0g6ESjITX7k1HImohIK22o5I38HAi1
       - PREST_PG_HOST=mosmix-postgis
       - PREST_PG_DATABASE=mosmix
-      - PREST_DEBUG=true
     cap_drop:
       - ALL
     security_opt:
