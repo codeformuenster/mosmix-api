@@ -2,7 +2,8 @@
 Description=Run mosmix-processor-l.service every hour
 
 [Timer]
-OnCalendar=*:29
+Unit=mosmix-processor@mosmix_s.service
+OnCalendar=*:0
 
 [Install]
 WantedBy=multi-user.target

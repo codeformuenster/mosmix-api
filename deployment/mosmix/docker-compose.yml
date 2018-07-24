@@ -13,9 +13,20 @@ services:
     restart: always
     networks:
       - mosmix-internal
+  preprocessor:
+    container_name: mosmix-preprocessor
+    image: quay.io/codeformuenster/mosmix-processor:v20180717-1
+    cap_drop:
+      - ALL
+    read_only: true
+    security_opt:
+      - no-new-privileges=true
+    entrypoint:
+      - /mosmix-check
+      - -interval=10s
   processor:
     container_name: mosmix-processor
-    image: quay.io/codeformuenster/mosmix-processor:v20180708-1
+    image: quay.io/codeformuenster/mosmix-processor:v20180717-1
     cap_drop:
       - ALL
     entrypoint:
@@ -30,7 +41,6 @@ services:
         source: processor-tmp
     networks:
       - mosmix-internal
-
   api:
     container_name: mosmix-api
     image: quay.io/codeformuenster/mosmix-api:v20180711-1

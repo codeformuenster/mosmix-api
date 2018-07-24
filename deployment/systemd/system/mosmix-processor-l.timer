@@ -1,8 +1,9 @@
 [Unit]
-Description=Run mosmix-processor-l.service on 03,09,15,21:30 UTC
+Description=Run mosmix-processor@mosmix_l.service on 03,09,15,21 UTC
 
 [Timer]
-OnCalendar=3,9,15,21:30 UTC
+Unit=mosmix-processor@mosmix_l.service
+OnCalendar=3,9,15,21:0 UTC
 
 [Install]
 WantedBy=multi-user.target

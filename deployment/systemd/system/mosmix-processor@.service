@@ -1,0 +1,10 @@
+[Unit]
+Description=Execute the mosmix parser for schema %i
+
+[Service]
+Type=oneshot
+
+Environment="COMPOSE_INTERACTIVE_NO_CLI=true" "COMPOSE_FILE=/etc/mosmix/docker-compose.yml"
+
+ExecStartPre=/usr/local/bin/docker-compose run --name mosmix-preprocessor-%i --rm -T preprocessor %i
+ExecStart=/usr/local/bin/docker-compose run --name mosmix-processor-%i --rm -T processor %i
