@@ -34,9 +34,6 @@ RUN apk add --no-cache openssh-client ca-certificates
 
 COPY --from=builder /install/caddy /usr/bin/caddy
 
-EXPOSE 80 443
-VOLUME /root/.caddy /srv
-
 COPY Caddyfile /etc/Caddyfile
 COPY queries /srv/queries
 COPY --from=swaggerui /usr/share/nginx/html /srv/html
