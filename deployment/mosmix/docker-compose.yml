@@ -43,41 +43,25 @@ services:
       - mosmix-internal
   api:
     container_name: mosmix-api
-    image: quay.io/codeformuenster/mosmix-api:v20180731-1
+    image: quay.io/codeformuenster/mosmix-api:v20180731-2
     environment:
       - PG_USER=mosmix
       - PG_PASS=fls0g6ESjITX7k1HImohIK22o5I38HAi1
       - PG_HOST=mosmix-postgis
-      - PG_DATABASE=mosmix
+      - PG_DB=mosmix
+      - PG_PORT=5432
     cap_drop:
       - ALL
     security_opt:
       - no-new-privileges=true
     read_only: true
+    volumes:
+      - type: volume
+        target: /root/.caddy
+        source: api-tmp
     restart: always
     networks:
       - mosmix-internal
-      - mosmix-external
-  frontend-proxy:
-    image: abiosoft/caddy:0.11.0
-    container_name: mosmix-frontend
-    cap_drop:
-      - ALL
-    cap_add:
-      - NET_BIND_SERVICE
-    security_opt:
-      - no-new-privileges=true
-    read_only: true
-    ports:
-      - "80:80"
-      - "443:443"
-    environment:
-      - CADDYPATH=/etc/caddycerts
-    volumes:
-      - /etc/mosmix/Caddyfile:/etc/Caddyfile:ro
-      - /etc/mosmix/certs:/etc/caddycerts
-      - /etc/mosmix/static:/srv
-    networks:
       - mosmix-external
 
 networks:
@@ -86,3 +70,4 @@ networks:
 
 volumes:
   processor-tmp:
+  api-tmp:

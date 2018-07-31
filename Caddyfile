@@ -11,6 +11,7 @@
     pg_host {$PG_HOST}
     pg_port {$PG_PORT}
     pg_user {$PG_USER}
+    pg_pass {$PG_PASS}
     pg_db {$PG_DB}
 
     canned_queries {
