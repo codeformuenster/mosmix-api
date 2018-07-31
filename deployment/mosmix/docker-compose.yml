@@ -43,12 +43,12 @@ services:
       - mosmix-internal
   api:
     container_name: mosmix-api
-    image: quay.io/codeformuenster/mosmix-api:v20180711-1
+    image: quay.io/codeformuenster/mosmix-api:v20180731-1
     environment:
-      - PREST_PG_USER=mosmix
-      - PREST_PG_PASS=fls0g6ESjITX7k1HImohIK22o5I38HAi1
-      - PREST_PG_HOST=mosmix-postgis
-      - PREST_PG_DATABASE=mosmix
+      - PG_USER=mosmix
+      - PG_PASS=fls0g6ESjITX7k1HImohIK22o5I38HAi1
+      - PG_HOST=mosmix-postgis
+      - PG_DATABASE=mosmix
     cap_drop:
       - ALL
     security_opt:
