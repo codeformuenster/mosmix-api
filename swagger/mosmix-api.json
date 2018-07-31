@@ -1,0 +1,149 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Mosmix API",
+    "description": "Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://mosmix-api.codeformuenster.org"
+    }
+  ],
+  "paths": {
+    "/v1/metadata": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/schema_param"
+          }
+        ],
+        "summary": "Returns metadata about the data in the database.",
+        "description": "Optional extended description in CommonMark or HTML.",
+        "responses": {
+          "200": {
+            "description": "A JSON array of user names",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/definitions": {
+      "get": {
+        "summary": "Returns definitions for forecast variables",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/schema_param"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/v1/places": {
+      "get": {
+        "summary": "Returns definitions places all around the world",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/schema_param"
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lng",
+            "schema": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            }
+          },
+          {
+            "in": "query",
+            "name": "lat",
+            "schema": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            }
+          },
+          {
+            "in": "query",
+            "name": "distance",
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/v1/forecast": {
+      "get": {
+        "summary": "Returns forecasts for a single place",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/schema_param"
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "schema_param": {
+        "in": "query",
+        "name": "schema",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "mosmix_s",
+            "mosmix_l"
+          ]
+        },
+        "required": true
+      }
+    }
+  }
+}

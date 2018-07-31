@@ -1,0 +1,20 @@
+0.0.0.0:3000 {
+  tls off
+  root /srv/html
+  log stdout
+  errors stderr
+
+  gzip
+  cors
+
+  mosmixapi {
+    pg_host {$PG_HOST}
+    pg_port {$PG_PORT}
+    pg_user {$PG_USER}
+    pg_db {$PG_DB}
+
+    canned_queries {
+      /v1 /srv/queries/v1
+    }
+  }
+}

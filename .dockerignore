@@ -2,3 +2,5 @@ Dockerfile
 .dockerignore
 LICENSE
 *.md
+deployment
+kubernetes-manifests
