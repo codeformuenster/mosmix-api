@@ -111,6 +111,7 @@ func setup(c *caddy.Controller) error {
 		PGUser:     configs[0].pgUser,
 		PGDatabase: configs[0].pgDatabase,
 		PGPort:     configs[0].pgPort,
+		PGPass:     configs[0].pgPass,
 		SSLMode:    "disable",
 	}
 	postgres.Load()
