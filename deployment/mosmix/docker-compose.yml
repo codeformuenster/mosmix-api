@@ -43,7 +43,7 @@ services:
       - mosmix-internal
   api:
     container_name: mosmix-api
-    image: quay.io/codeformuenster/mosmix-api:v20180731-2
+    image: quay.io/codeformuenster/mosmix-api:v20180801-1
     environment:
       - PG_USER=mosmix
       - PG_PASS=fls0g6ESjITX7k1HImohIK22o5I38HAi1
