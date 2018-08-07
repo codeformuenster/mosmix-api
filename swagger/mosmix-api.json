@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Mosmix API",
-    "description": "Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.",
+    "description": "This API serves the weather forecast of the German Weather Service (DWD). The DWD calls there forecasts MOSMIX.<br>\nThe data is scraped from [https://opendata.dwd.de/weather/local_forecasts/mos/MOSMIX_L/all_stations/kml/](https://opendata.dwd.de/weather/local_forecasts/mos/MOSMIX_L/all_stations/kml/) and [https://opendata.dwd.de/weather/local_forecasts/mos/MOSMIX_S/all_stations/kml/](https://opendata.dwd.de/weather/local_forecasts/mos/MOSMIX_S/all_stations/kml/).<br>\nThe API allows to search for places, return the forecast variables for a place, display the definitions used in the forecasts and return some metadata about the scraping.<br>\nThe code is open source and available on GitHub at [codeformuenster/mosmix-processor](https://github.com/codeformuenster/mosmix-processor) and [codeformuenster/mosmix-api](https://github.com/codeformuenster/mosmix-api).<br><br>\n[Data basis: Deutscher Wetterdienst](https://www.dwd.de/EN/service/copyright/copyright_artikel.html)",
     "version": "v1"
   },
   "servers": [
@@ -18,17 +18,69 @@
             "$ref": "#/components/parameters/schema_param"
           }
         ],
-        "summary": "Returns metadata about the data in the database.",
-        "description": "Optional extended description in CommonMark or HTML.",
+        "summary": "Returns metadata about the data in the database",
+        "description": "Metadata contains information about the scraped forecast file itself as well as things like filename and scraping duration.",
         "responses": {
           "200": {
-            "description": "A JSON array of user names",
+            "description": "Information about the currently available data in the API",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "string"
+                    "type": "object",
+                    "properties": {
+                      "source_url": {
+                        "type": "string"
+                      },
+                      "processing_timestamp": {
+                        "type": "string"
+                      },
+                      "download_duration": {
+                        "type": "integer"
+                      },
+                      "parsing_duration": {
+                        "type": "integer"
+                      },
+                      "parser": {
+                        "type": "string"
+                      },
+                      "dwd_issuer": {
+                        "type": "string"
+                      },
+                      "dwd_product_id": {
+                        "type": "string"
+                      },
+                      "dwd_generating_process": {
+                        "type": "string"
+                      },
+                      "dwd_available_forecast_variables": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "dwd_available_timesteps": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "dwd_referenced_models": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            },
+                            "reference_time": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -40,6 +92,7 @@
     "/v1/definitions": {
       "get": {
         "summary": "Returns definitions for forecast variables",
+        "description": "Contains definitions of the forecast variables used in the actual forecast. Each definition contains the short name, an unit of measurement and a description of the forecast variable.",
         "parameters": [
           {
             "$ref": "#/components/parameters/schema_param"
@@ -47,14 +100,39 @@
         ],
         "responses": {
           "200": {
-            "description": "Ok"
+            "description": "A JSON array of forecast variable definitions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "short_name": {
+                        "type": "string",
+                        "description": "The short name of the forecast variable"
+                      },
+                      "unit_of_measurement": {
+                        "type": "string",
+                        "description": "The unit in which the forecast variable is measured"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "A description of the forecast variable"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
     "/v1/places": {
       "get": {
-        "summary": "Returns definitions places all around the world",
+        "summary": "Allows to search places all around the world",
+        "description": "Search places by either name, or within a buffer around geographic coordinates. (Default)",
         "parameters": [
           {
             "$ref": "#/components/parameters/schema_param"
@@ -62,6 +140,7 @@
           {
             "in": "query",
             "name": "name",
+            "description": "A name for which you want to query a place",
             "schema": {
               "type": "string"
             }
@@ -69,6 +148,7 @@
           {
             "in": "query",
             "name": "lng",
+            "description": "The latitude for which you want to return places",
             "schema": {
               "type": "number",
               "minimum": -180,
@@ -78,6 +158,7 @@
           {
             "in": "query",
             "name": "lat",
+            "description": "the latitude for which you want to return places",
             "schema": {
               "type": "number",
               "minimum": -90,
@@ -87,15 +168,49 @@
           {
             "in": "query",
             "name": "distance",
+            "description": "The maximum distance to your specified latitude and longitude. Defaults to 10 if not specified.",
             "schema": {
               "type": "number",
-              "minimum": 0
+              "minimum": 0,
+              "default": 10
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Ok"
+            "description": "A JSON array of places matching the query parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The id of the place. Use this to query the forecast"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "The real world name of the place"
+                      },
+                      "lng": {
+                        "type": "number",
+                        "description": "The WGS84 longitude of the place"
+                      },
+                      "lat": {
+                        "type": "number",
+                        "description": "The WGS84 latitude of the place"
+                      },
+                      "alt": {
+                        "type": "number",
+                        "description": "The WGS84 altitude of the place"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -109,14 +224,8 @@
           },
           {
             "in": "query",
-            "name": "name",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
             "name": "id",
+            "description": "The id of the place for which forecasts should be returned",
             "schema": {
               "type": "string"
             }
@@ -124,7 +233,17 @@
         ],
         "responses": {
           "200": {
-            "description": "Ok"
+            "description": "A JSON array of forecast timestamps for the specified place",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -135,6 +254,7 @@
       "schema_param": {
         "in": "query",
         "name": "schema",
+        "description": "The MOSMIX schema for which data should be returned.",
         "schema": {
           "type": "string",
           "enum": [
