@@ -1,15 +1,6 @@
 # Usage
 
-Usually the workflow looks like this:
-
-1. Find out the id of the place you want forecasts for
-
-    https://mosmix-api.codeformuenster.org/v1/places?schema=mosmix_s&name=muenster
-    https://mosmix-api.codeformuenster.org/v1/places?schema=mosmix_s&lat=
-
-2. Use the id to query the forecasts
-
-    https://mosmix-api.codeformuenster.org/v1/forecast?schema=mosmix_s&id=P0036
+Check https://mosmix-api.codeformuenster.org
 
 # Deployment
 
